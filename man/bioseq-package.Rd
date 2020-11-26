@@ -6,8 +6,10 @@
 \alias{bioseq-package}
 \title{bioseq: A Toolbox for Manipulating Biological Sequences}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 Classes and functions to work with biological sequences (DNA, RNA and amino acid sequences).
-    Implements S3 infrastructure to work with biological sequences.
+    Implements S3 infrastructure to work with biological sequences as described in Keck (2020) <doi:10.1111/2041-210X.13490>.
     Provides a collection of functions to perform biological conversion among classes
     (transcription, translation) and basic operations on sequences
     (detection, selection and replacement based on positions or patterns).
@@ -22,7 +24,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Francois Keck \email{francois.keck@gmail.com} (0000-0002-3323-4167) [copyright holder]
+\strong{Maintainer}: Francois Keck \email{francois.keck@gmail.com} (\href{https://orcid.org/0000-0002-3323-4167}{ORCID}) [copyright holder]
 
 }
 \keyword{internal}

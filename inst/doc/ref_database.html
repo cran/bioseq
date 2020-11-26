@@ -14,6 +14,70 @@
 
 <title>Cleaning and exploring NCBI data with the bioseq package</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -440,31 +504,32 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>fra_consensus &lt;-<span class="st"> </span>fra_data <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="st">  </span><span class="kw">group_by</span>(taxa) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">consensus_barcode =</span> <span class="kw">seq_consensus</span>(barcode))</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a>fra_consensus</span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; # A tibble: 20 x 2</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt;    taxa              consensus_barcode                                          </span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt;    &lt;chr&gt;             &lt;DNA&gt;                                                      </span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt;  1 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCCAAAGCTGTA…</span></span>
-<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt;  2 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
-<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt;  3 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
-<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt;  4 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
-<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt;  5 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
-<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt;  6 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt;  7 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt;  8 Fragilaria KC969… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCCAAAGCTGTA…</span></span>
-<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt;  9 Fragilaria KC969… CGTTACAGCTGCTACTATGGAAGATGTATACAAACGTAGTGAGTATGCTAAAGCTGTA…</span></span>
-<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; 10 Fragilaria MF092… CATTACTGCTGCTACTATGGATGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; 11 Fragilaria MF092… CATCACAGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAATACGCTAAAGCTGTA…</span></span>
-<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt; 12 Fragilaria agnes… CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt; 13 Fragilaria bidens CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGATTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt; 14 Fragilaria croto… CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGCTTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; 15 Fragilaria famel… CATCACTGCTGCTACTATGGAAGAAGTTTACAAACGTGGTGAGTATGCTAAAGCTGTA…</span></span>
-<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt; 16 Fragilaria heath… CATCACTGCTGCTACTATGGAAGAGCTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt; 17 Fragilaria joach… CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; 18 Fragilaria permi… CATTACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-27"><a href="#cb11-27"></a><span class="co">#&gt; 19 Fragilaria rumpe… CATCACGGCTGCTACTATGGAAGAACTTTACAAACGTGGTGCTTACGCTAAAGCTGTA…</span></span>
-<span id="cb11-28"><a href="#cb11-28"></a><span class="co">#&gt; 20 Fragilaria stria… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCCAAAGCTGTA…</span></span></code></pre></div>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a>fra_consensus</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; # A tibble: 20 x 2</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt;    taxa              consensus_barcode                                          </span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt;    &lt;chr&gt;             &lt;DNA&gt;                                                      </span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt;  1 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCCAAAGCTGTA…</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt;  2 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt;  3 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt;  4 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt;  5 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt;  6 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt;  7 Fragilaria EU090… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCTAAAGCTGTA…</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt;  8 Fragilaria KC969… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCCAAAGCTGTA…</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt;  9 Fragilaria KC969… CGTTACAGCTGCTACTATGGAAGATGTATACAAACGTAGTGAGTATGCTAAAGCTGTA…</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="co">#&gt; 10 Fragilaria MF092… CATTACTGCTGCTACTATGGATGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt; 11 Fragilaria MF092… CATCACAGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAATACGCTAAAGCTGTA…</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt; 12 Fragilaria agnes… CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt; 13 Fragilaria bidens CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGATTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; 14 Fragilaria croto… CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGCTTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt; 15 Fragilaria famel… CATCACTGCTGCTACTATGGAAGAAGTTTACAAACGTGGTGAGTATGCTAAAGCTGTA…</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt; 16 Fragilaria heath… CATCACTGCTGCTACTATGGAAGAGCTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; 17 Fragilaria joach… CATCACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="co">#&gt; 18 Fragilaria permi… CATTACTGCTGCTACTATGGAAGAACTTTACAAACGTGGTGAGTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co">#&gt; 19 Fragilaria rumpe… CATCACGGCTGCTACTATGGAAGAACTTTACAAACGTGGTGCTTACGCTAAAGCTGTA…</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="co">#&gt; 20 Fragilaria stria… CATCACAGCTGCTACTATGGAAGAAGTTTACAAGCGTGGTGAATATGCCAAAGCTGTA…</span></span></code></pre></div>
 <p>Next, we will use <code>ape</code> to do a quick phylogenetic reconstruction of these sequences. We can use the function <code>as_DNAbin</code> to convert a tibble into a <code>DNAbin</code> object and then use the functions of <code>ape</code> to reconstruct and plot a phylogenetic tree with the distance-based BIONJ algorithm.</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>fra_consensus <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">as_DNAbin</span>(consensus_barcode, taxa) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -514,12 +579,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <span id="cb15-3"><a href="#cb15-3"></a><span class="st">  </span><span class="kw">group_by</span>(cluster) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb15-4"><a href="#cb15-4"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">taxa_group =</span> <span class="kw">paste</span>(taxa, <span class="dt">collapse =</span> <span class="st">&quot;/&quot;</span>),</span>
 <span id="cb15-5"><a href="#cb15-5"></a>            <span class="dt">consensus_barcode =</span> <span class="kw">seq_consensus</span>(consensus_barcode))</span>
-<span id="cb15-6"><a href="#cb15-6"></a></span>
-<span id="cb15-7"><a href="#cb15-7"></a>fra_consensus <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="st">  </span><span class="kw">as_DNAbin</span>(consensus_barcode, taxa_group) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="st">  </span>ape<span class="op">::</span><span class="kw">dist.dna</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="st">  </span>ape<span class="op">::</span><span class="kw">bionj</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="st">  </span><span class="kw">plot</span>()</span></code></pre></div>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; `summarise()` ungrouping output (override with `.groups` argument)</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a></span>
+<span id="cb15-8"><a href="#cb15-8"></a>fra_consensus <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="st">  </span><span class="kw">as_DNAbin</span>(consensus_barcode, taxa_group) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="st">  </span>ape<span class="op">::</span><span class="kw">dist.dna</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="st">  </span>ape<span class="op">::</span><span class="kw">bionj</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="st">  </span><span class="kw">plot</span>()</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <p>It is important to note that this tree is not an accurate phylogenetic reconstruction but it can help to visualise the hierarchical relationships between the sequences. This is particularly useful with larger datasets to detect polyphyletic clades unresolved by the barcode region.</p>
 </div>

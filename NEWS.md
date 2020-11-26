@@ -1,3 +1,24 @@
+# bioseq 0.1.2
+
+## Minor changes
+
+* Use `getOption()` instead of `options()` in function arguments (Functions `aliview`, `seaview`, `print_sequences`, `print.bioseq_dna`, `print.bioseq_rna` and `print.bioseq_aa`).
+
+## Bug fixes
+
+* Fix bug when importing fasta with > characters in sequence names.
+
+* Fix bug when exporting fasta (`write_fasta`) with NA sequences.
+
+## Documentation improvements
+
+* On CRAN request, add a reference to Keck (2020) in description.
+
+* New logo.
+
+* Add CITATION file.
+
+
 # bioseq 0.1.1
 
 ## New features
