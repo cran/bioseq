@@ -1,7 +1,7 @@
 Package: bioseq
 Type: Package
 Title: A Toolbox for Manipulating Biological Sequences
-Version: 0.1.2
+Version: 0.1.3
 Authors@R: 
     c(person(given = "Francois",
              family = "Keck",
@@ -22,13 +22,13 @@ BugReports: https://github.com/fkeck/bioseq/issues
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.1.0)
-Imports: methods, vctrs, tibble, ape, crayon, dplyr, pillar, stringr,
-        readr, rlang
+Imports: methods, vctrs, tibble, ape, crayon, dplyr, pillar, stringi,
+        stringr, stringdist, readr, rlang
 Suggests: knitr, rmarkdown, testthat (>= 2.1.0), covr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2020-11-25 17:08:28 UTC; francois
+Packaged: 2021-09-03 07:35:56 UTC; ecoadmin
 Author: Francois Keck [aut, cre, cph] (<https://orcid.org/0000-0002-3323-4167>)
 Repository: CRAN
-Date/Publication: 2020-11-26 02:40:02 UTC
+Date/Publication: 2021-09-03 08:30:02 UTC

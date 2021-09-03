@@ -61,7 +61,7 @@ fra_data
 
 ## -----------------------------------------------------------------------------
 fra_data <- fra_data %>% 
-  filter(seq_nchar(barcode) == 263)
+  filter(seq_nchar(barcode) == 312)
 
 fra_data
 

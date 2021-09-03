@@ -7,6 +7,9 @@
 #' @param pattern a DNA, RNA or AA vectors (but same as \code{x})
 #' or a character vector of regular expressions, or a list.
 #' See section Patterns.
+#' @param max_error numeric value ranging from 0 to 1 and giving the
+#' maximum error rate allowed between the target sequence and the pattern.
+#' Error rate is relative to the length of the pattern.
 #'
 #'
 #' @section Patterns:
@@ -36,9 +39,14 @@
 #' GG in the second sequence, AAA or CCC in the third,
 #' and so on following the recycling rule.
 #'
+#'  @section Fuzzy matching:
+#' When \code{max_error} is greater than zero, the function perform
+#' fuzzy matching. Fuzzy matching does not support regular expression.
+#'
 #' @seealso
-#' \code{\link[stringi]{stri_detect}} from \pkg{stringi} and
-#' \code{\link[stringr]{str_detect}} from \pkg{stringr}
+#' \code{\link[stringi]{stri_detect}} from \pkg{stringi},
+#' \code{\link[stringr]{str_detect}} from \pkg{stringr} and
+#' \code{\link[stringdist]{afind}} from \pkg{stringdist}
 #' for the underlying implementation.
 #'
 #' @return A logical vector.
@@ -49,10 +57,28 @@
 #'
 #' x <- dna(c("ACGTTAGTGTAGCCGT", "CTCGAAATGA"))
 #' seq_detect_pattern(x, dna(c("CCG", "AAA")))
+#'
+#' # Regular expression
 #' seq_detect_pattern(x, "^A.{2}T")
 #'
-seq_detect_pattern <- function(x, pattern) {
+#' # Fuzzy matching
+#' seq_detect_pattern(x, dna("AGG"), max_error = 0.2)
+#' # No match. The pattern has three character, the max_error
+#' # has to be > 1/3 to allow one character difference.
+#'
+#' seq_detect_pattern(x, dna("AGG"), max_error = 0.4)
+#' # Match
+#'
+seq_detect_pattern <- function(x, pattern, max_error = 0) {
   check_dna_rna_aa(x)
+
+  if(any(max_error > 0)) {
+    res <- seq_detect_fuzzypattern(x = x,
+                                   pattern = pattern,
+                                   max_dist = max_error)
+    return(res)
+  }
+
   pattern <- check_and_prepare_pattern(x, pattern)
   res <- stringr::str_detect(string = x, pattern = pattern)
   return(res)
@@ -65,14 +91,28 @@ seq_detect_pattern <- function(x, pattern) {
 #' @param x a DNA, RNA or AA vector to be cropped.
 #' @param pattern_in patterns defining the beginning (left-side).
 #' @param pattern_out patterns defining the end (right-side).
+#' @param max_error_in,max_error_out numeric values ranging from
+#' 0 to 1 and giving the maximum error rate allowed between the
+#' target sequence and \code{pattern_in}/\code{pattern_out}.
+#' Error rate is relative to the length of the pattern.
+#' @param include_patterns logical. Should the matched pattern
+#' sequence included in the returned sequences?
 #'
 #' @inheritSection seq_detect_pattern Patterns
+#'
+#' @section Fuzzy matching:
+#' When \code{max_error_in} or \code{max_error_out} are greater
+#' than zero, the function perform fuzzy matching.
+#' Fuzzy matching does not support regular expression.
+#'
 #' @return  A cropped DNA, RNA or AA vector.
+#' Sequences where patterns are not detected returns \code{NA}.
 #'
 #' @family string operations
 #' @seealso
-#' \code{\link[stringi]{stri_extract}} from \pkg{stringi} and
-#' \code{\link[stringr]{str_extract}} from \pkg{stringr}
+#' \code{\link[stringi]{stri_extract}} from \pkg{stringi},
+#' \code{\link[stringr]{str_extract}} from \pkg{stringr} and
+#' \code{\link[stringdist]{afind}} from \pkg{stringdist}
 #' for the underlying implementation.
 #'
 #' @export
@@ -81,12 +121,31 @@ seq_detect_pattern <- function(x, pattern) {
 #'
 #' x <- dna("ACGTTAAAAAGTGTAGCCCCCGT", "CTCGAAATGA")
 #' seq_crop_pattern(x, pattern_in = "AAAA", pattern_out = "CCCC")
-seq_crop_pattern <- function(x, pattern_in, pattern_out) {
+seq_crop_pattern <- function(x, pattern_in, pattern_out,
+                             max_error_in = 0, max_error_out = 0,
+                             include_patterns = TRUE) {
   check_dna_rna_aa(x)
+
+  if(any(max_error_in > 0) | any(max_error_out > 0)) {
+    res <- seq_crop_fuzzypattern(x = x,
+                                 pattern_in = pattern_in,
+                                 pattern_out = pattern_out,
+                                 max_dist_in = max_error_in,
+                                 max_dist_out = max_error_out,
+                                 include_patterns = include_patterns)
+    return(res)
+  }
+
+
   pattern_in <- check_and_prepare_pattern(x, pattern_in)
   pattern_out <- check_and_prepare_pattern(x, pattern_out)
 
-  rgx <- paste0("(?<=", pattern_in, ").*(?=", pattern_out, ")")
+  if(include_patterns) {
+    rgx <- paste0("(?=(?:", pattern_in, ")).*(?:", pattern_out, ")")
+  } else {
+    rgx <- paste0("(?<=", pattern_in, ").*(?=", pattern_out, ")")
+  }
+
   res <- stringr::str_extract(string = x, pattern = rgx)
   res <- coerce_seq_as_input(res, x)
   return(res)
