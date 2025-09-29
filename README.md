@@ -3,7 +3,7 @@
 <img src="man/figures/logo.png" align="right" width="150"/>
 
 <!-- badges: start -->
-[![R build status](https://github.com/fkeck/bioseq/workflows/R-CMD-check/badge.svg)](https://github.com/fkeck/bioseq/actions)
+[![R-CMD-check](https://github.com/fkeck/bioseq/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/fkeck/bioseq/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/fkeck/bioseq/branch/master/graph/badge.svg)](https://app.codecov.io/gh/fkeck/bioseq?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/bioseq)](https://www.r-pkg.org/badges/version/bioseq)
 <!-- badges: end -->

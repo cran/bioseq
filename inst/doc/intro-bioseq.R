@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -57,9 +57,9 @@ x[seq_detect_pattern(x, "A{4}")]
 # This works
 x[seq_detect_pattern(x, dna("AAAA"))]
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  # This fails because x is a DNA vector and pattern is an amino acid vector
-#  x[seq_detect_pattern(x, aa("AAAA"))]
+## ----eval=FALSE---------------------------------------------------------------
+# # This fails because x is a DNA vector and pattern is an amino acid vector
+# x[seq_detect_pattern(x, aa("AAAA"))]
 
 ## -----------------------------------------------------------------------------
 # This works because W can be A or T.

@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -9,10 +9,10 @@ knitr::opts_chunk$set(
 ## -----------------------------------------------------------------------------
 library(bioseq)
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  library(tidyverse)
+## ----eval=FALSE---------------------------------------------------------------
+# library(tidyverse)
 
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 library(tibble)
 library(dplyr)
 library(stringr)
@@ -102,9 +102,9 @@ fra_consensus %>%
   ape::bionj() %>% 
   plot()
 
-## ---- eval=FALSE--------------------------------------------------------------
-#  fra_consensus %>%
-#    select(taxa_group, consensus_barcode) %>%
-#    deframe() %>%
-#    write_fasta("my_sequences.fasta")
+## ----eval=FALSE---------------------------------------------------------------
+# fra_consensus %>%
+#   select(taxa_group, consensus_barcode) %>%
+#   deframe() %>%
+#   write_fasta("my_sequences.fasta")
 
